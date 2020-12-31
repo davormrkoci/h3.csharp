@@ -140,8 +140,8 @@ namespace h3
          * @param  k        k >= 0
          * @param  out      zero-filled array which must be of size maxKringSize(k)
          */
-        public static void kRing(H3Index origin, int k, ref H3Index[] outIndices) {
-            kRingDistances(origin, k, ref outIndices, null);
+        public static void kRing(H3Index origin, int k, H3Index[] outIndices) {
+            kRingDistances(origin, k, outIndices, null);
         }
 
         /**
@@ -160,10 +160,10 @@ namespace h3
          * @param  distances   NULL or a zero-filled array which must be of size
          *                     maxKringSize(k)
          */
-        public static void kRingDistances(H3Index origin, int k, ref H3Index[] outIndices,
+        public static void kRingDistances(H3Index origin, int k, H3Index[] outIndices,
                                        int[] distances) {
             // Optimistically try the faster hexRange algorithm first
-            int failed = hexRangeDistances(origin, k, ref outIndices, distances);
+            int failed = hexRangeDistances(origin, k, outIndices, distances);
             if (failed != HEX_RANGE_SUCCESS) {
                 int maxIdx = maxKringSize(k);
                 // Fast algo failed, fall back to slower, correct algo
@@ -175,13 +175,13 @@ namespace h3
 
                 if (distances == null) {
                     distances = new int[maxIdx];
-                    _kRingInternal(origin, k, ref outIndices, ref distances, maxIdx, 0);
+                    _kRingInternal(origin, k, outIndices, distances, maxIdx, 0);
                 } else {
                     for (int i = 0; i < maxIdx; ++i)
                     {
                         distances[i] = 0;
                     }
-                    _kRingInternal(origin, k, ref outIndices, ref distances, maxIdx, 0);
+                    _kRingInternal(origin, k, outIndices, distances, maxIdx, 0);
                 }
             }
         }
@@ -202,7 +202,7 @@ namespace h3
          * @param  maxIdx      Size of out and scratch arrays (must be maxKringSize(k))
          * @param  curK        Current distance from the origin
          */
-        public static void _kRingInternal(H3Index origin, int k, ref H3Index[] outIndices, ref int[] distances,
+        public static void _kRingInternal(H3Index origin, int k, H3Index[] outIndices, int[] distances,
                             int maxIdx, int curK) {
             if (origin == 0) return;
 
@@ -227,7 +227,7 @@ namespace h3
             for (int i = 0; i < 6; i++) {
                 int rotations = 0;
                 _kRingInternal(h3NeighborRotations(origin, DIRECTIONS[i], ref rotations),
-                               k, ref outIndices, ref distances, maxIdx, curK + 1);
+                               k, outIndices, distances, maxIdx, curK + 1);
             }
         }
 
@@ -392,8 +392,8 @@ namespace h3
          * @param out Array which must be of size maxKringSize(k).
          * @return 0 if no pentagon or pentagonal distortion area was encountered.
          */
-        public static int hexRange(H3Index origin, int k, ref H3Index[] indices) {
-            return hexRangeDistances(origin, k, ref indices, null);
+        public static int hexRange(H3Index origin, int k, H3Index[] indices) {
+            return hexRangeDistances(origin, k, indices, null);
         }
 
         /**
@@ -414,7 +414,7 @@ namespace h3
          * @param distances Null or array which must be of size maxKringSize(k).
          * @return 0 if no pentagon or pentagonal distortion area was encountered.
          */
-        public static int hexRangeDistances(H3Index origin, int k, ref H3Index[] indices,
+        public static int hexRangeDistances(H3Index origin, int k, H3Index[] indices,
                                          int[] distances) {
             // Return codes:
             // 1 Pentagon was encountered
@@ -509,7 +509,7 @@ namespace h3
          * @return 0 if no pentagon is encountered. Cannot trust output otherwise
          */
         /*
-        int hexRanges(H3Index[] h3Set, int length, int k, ref H3Index[] outIndices) {
+        int hexRanges(H3Index[] h3Set, int length, int k, H3Index[] outIndices) {
             int success = 0;
             H3Index* segment;
             int segmentSize = maxKringSize(k);
@@ -536,7 +536,7 @@ namespace h3
          * @param out Array which must be of size 6 * k (or 1 if k == 0)
          * @return 0 if successful; nonzero otherwise.
          */
-        public static int hexRing(H3Index origin, int k, ref H3Index[] outIndices) {
+        public static int hexRing(H3Index origin, int k, H3Index[] outIndices) {
             // Short-circuit on 'identity' ring
             if (k == 0) {
                 outIndices[0] = origin;
@@ -654,7 +654,7 @@ namespace h3
          * @param out The slab of zeroed memory to write to. Assumed to be big enough.
          */
         /*
-        void polyfill(in GeoPolygon geoPolygon, int res, ref H3Index[] outIndices) {
+        void polyfill(in GeoPolygon geoPolygon, int res, H3Index[] outIndices) {
             // TODO: Eliminate this wrapper with the H3 4.0.0 release
             int failure = _polyfillInternal(geoPolygon, res, out);
             // The polyfill algorithm can theoretically fail if the allocated memory is

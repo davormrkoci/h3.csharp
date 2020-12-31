@@ -366,7 +366,7 @@ namespace h3
          * @param childRes int the child level to produce
          * @param children H3Index* the memory to store the resulting addresses in
          */
-        public static void h3ToChildren(H3Index h, int childRes, ref H3Index[] children, int idx = 0)
+        public static void h3ToChildren(H3Index h, int childRes, H3Index[] children, int idx = 0)
         {
             int parentRes = H3_GET_RESOLUTION(h);
             if (!_isValidChildRes(parentRes, childRes)) {
@@ -385,7 +385,7 @@ namespace h3
                         children[idx++] = H3_INVALID_INDEX;
                     }
                 } else {
-                    h3ToChildren(makeDirectChild(h, i), childRes, ref children, idx);
+                    h3ToChildren(makeDirectChild(h, i), childRes, children, idx);
                     idx += bufferChildStep;
                 }
             }
@@ -425,7 +425,7 @@ namespace h3
          * contiguous regions exist in the set at all and no compression possible)
          * @return an error code on bad input data
          */
-        public static int compact(in H3Index[] h3Set, ref H3Index[] compactedSet, int numHexes) {
+        public static int compact(in H3Index[] h3Set, H3Index[] compactedSet, int numHexes) {
             if (numHexes == 0) {
                 return COMPACT_SUCCESS;
             }
@@ -591,7 +591,7 @@ namespace h3
          * smaller than the output resolution.
          */
         public static int uncompact(in H3Index[] compactedSet, int numHexes,
-                                 ref H3Index[] h3Set, int maxHexes, int res) {
+                H3Index[] h3Set, int maxHexes, int res) {
             int outOffset = 0;
             for (int i = 0; i < numHexes; i++) {
                 if (compactedSet[i] == 0) continue;
@@ -616,7 +616,7 @@ namespace h3
                         // We're about to go too far, abort!
                         return -1;
                     }
-                    h3ToChildren(compactedSet[i], res, ref h3Set, outOffset);
+                    h3ToChildren(compactedSet[i], res, h3Set, outOffset);
                     outOffset += numHexesToGen;
                 }
             }
@@ -1010,7 +1010,7 @@ namespace h3
          * @param h3 The H3 index
          * @param out Output array. Must be of size maxFaceCount(h3).
          */
-        public static void h3GetFaces(H3Index h3, ref int[] faces) {
+        public static void h3GetFaces(H3Index h3, int[] faces) {
             int res = H3_GET_RESOLUTION(h3);
             bool isPentagon = h3IsPentagon(h3);
 
@@ -1021,7 +1021,7 @@ namespace h3
                 // Note that this would not work for res 15, but this is only run on
                 // Class II pentagons, it should never be invoked for a res 15 index.
                 H3Index childPentagon = makeDirectChild(h3, 0);
-                h3GetFaces(childPentagon, ref faces);
+                h3GetFaces(childPentagon, faces);
                 return;
             }
 
@@ -1036,10 +1036,10 @@ namespace h3
 
             if (isPentagon) {
                 vertexCount = Constants.NUM_PENT_VERTS;
-                FaceIJK._faceIjkPentToVerts(ref fijk, ref res, ref fijkVerts);
+                FaceIJK._faceIjkPentToVerts(ref fijk, ref res, fijkVerts);
             } else {
                 vertexCount = Constants.NUM_HEX_VERTS;
-                FaceIJK._faceIjkToVerts(ref fijk, ref res, ref fijkVerts);
+                FaceIJK._faceIjkToVerts(ref fijk, ref res, fijkVerts);
             }
 
             // We may not use all of the slots in the output array,
@@ -1084,7 +1084,7 @@ namespace h3
          * @param res The resolution to produce pentagons at.
          * @param out Output array. Must be of size pentagonIndexCount().
          */
-        public static void getPentagonIndexes(int res, ref H3Index[] indices) {
+        public static void getPentagonIndexes(int res, H3Index[] indices) {
             int i = 0;
             for (int bc = 0; bc < Constants.NUM_BASE_CELLS; bc++) {
                 if (BaseCellData._isBaseCellPentagon(bc)) {

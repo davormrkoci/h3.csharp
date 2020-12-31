@@ -17,7 +17,7 @@ namespace h3
             public const double M_PI_180 = M_PI / 180;
 
             /** pi * 180 */
-            public const double M_180_PI = M_PI * 180;
+            public const double M_180_PI = 180 / M_PI;
 
             /** threshold epsilon */
             public const double EPSILON = 0.0000000000000001;

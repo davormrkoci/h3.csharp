@@ -902,7 +902,7 @@ namespace h3
          *
          * @param out H3Index* the memory to store the resulting base cells in
          */
-        public static void getRes0Indexes(ref H3Index[] indexes) {
+        public static void getRes0Indexes(H3Index[] indexes) {
             for (int bc = 0; bc < Constants.NUM_BASE_CELLS; bc++) {
                 H3Index baseCell = H3Index.H3_INIT;
                 H3Index.H3_SET_MODE(ref baseCell, Constants.H3_HEXAGON_MODE);

@@ -496,7 +496,7 @@ namespace h3
             int adjRes = res;
             FaceIJK centerIJK = h;
             FaceIJK[] fijkVerts = new FaceIJK[Constants.NUM_PENT_VERTS];
-            _faceIjkPentToVerts(ref centerIJK, ref adjRes, ref fijkVerts);
+            _faceIjkPentToVerts(ref centerIJK, ref adjRes, fijkVerts);
 
             // convert each vertex to lat/lon
             // adjust the face of each vertex as appropriate and introduce
@@ -595,7 +595,7 @@ namespace h3
          *            necessary for the substrate grid resolution.
          * @param fijkVerts Output array for the vertices
          */
-        public static void _faceIjkPentToVerts(ref FaceIJK fijk, ref int res, ref FaceIJK[] fijkVerts)
+        public static void _faceIjkPentToVerts(ref FaceIJK fijk, ref int res, FaceIJK[] fijkVerts)
         {
             CoordIJK[] verts;
 
@@ -671,7 +671,7 @@ namespace h3
             int adjRes = res;
             FaceIJK centerIJK = h;
             FaceIJK[] fijkVerts = new FaceIJK[Constants.NUM_HEX_VERTS];
-            _faceIjkToVerts(ref centerIJK, ref adjRes, ref fijkVerts);
+            _faceIjkToVerts(ref centerIJK, ref adjRes, fijkVerts);
 
             // convert each vertex to lat/lon
             // adjust the face of each vertex as appropriate and introduce
@@ -772,7 +772,7 @@ namespace h3
          *            necessary for the substrate grid resolution.
          * @param fijkVerts Output array for the vertices
          */
-        public static void _faceIjkToVerts(ref FaceIJK fijk, ref int res, ref FaceIJK[] fijkVerts)
+        public static void _faceIjkToVerts(ref FaceIJK fijk, ref int res, FaceIJK[] fijkVerts)
         {
             CoordIJK[] verts;
             

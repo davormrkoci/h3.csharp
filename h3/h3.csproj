@@ -48,7 +48,6 @@
         <Compile Include="faceijk.cs" />
         <Compile Include="geoBoundary.cs" />
         <Compile Include="geoCoord.cs" />
-        <Compile Include="h3api.cs" />
         <Compile Include="h3Index.cs" />
         <Compile Include="h3UniEdge.cs" />
         <Compile Include="linkedGeo.cs" />
